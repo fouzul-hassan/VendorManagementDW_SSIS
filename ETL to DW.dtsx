@@ -11,8 +11,8 @@
   DTS:LocaleID="2057"
   DTS:ObjectName="Package1"
   DTS:PackageType="5"
-  DTS:VersionBuild="58"
-  DTS:VersionGUID="{89C63654-4A0F-4AC1-8878-31367C8F9716}">
+  DTS:VersionBuild="71"
+  DTS:VersionGUID="{A551ECBC-EB6B-4895-940A-AEEBCEDF7B0C}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -466,18 +466,6 @@
                       externalMetadataColumnId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[POID]"
                       lineageId="Package\ETL - Delivery_Fact\Extract Delivery from the Datasource.Outputs[OLE DB Source Output].Columns[POID]" />
                     <inputColumn
-                      refId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].Columns[DeliveryDate]"
-                      cachedDataType="dbDate"
-                      cachedName="DeliveryDate"
-                      externalMetadataColumnId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryDate]"
-                      lineageId="Package\ETL - Delivery_Fact\Extract Delivery from the Datasource.Outputs[OLE DB Source Output].Columns[DeliveryDate]" />
-                    <inputColumn
-                      refId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].Columns[ExpectedDeliveryDate]"
-                      cachedDataType="dbDate"
-                      cachedName="ExpectedDeliveryDate"
-                      externalMetadataColumnId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[ExpectedDeliveryDate]"
-                      lineageId="Package\ETL - Delivery_Fact\Extract Delivery from the Datasource.Outputs[OLE DB Source Output].Columns[ExpectedDeliveryDate]" />
-                    <inputColumn
                       refId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].Columns[OnTimeDelivery]"
                       cachedDataType="bool"
                       cachedName="OnTimeDelivery"
@@ -507,6 +495,18 @@
                       cachedName="TrackingNumber"
                       externalMetadataColumnId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[TrackingNumber]"
                       lineageId="Package\ETL - Delivery_Fact\Extract Delivery from the Datasource.Outputs[OLE DB Source Output].Columns[TrackingNumber]" />
+                    <inputColumn
+                      refId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].Columns[ExpectedDeliveryDateKey]"
+                      cachedDataType="i4"
+                      cachedName="ExpectedDeliveryDateKey"
+                      externalMetadataColumnId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[ExpectedDeliveryDateKey]"
+                      lineageId="Package\ETL - Delivery_Fact\Lookup for Expected Delivery.Outputs[Lookup Match Output].Columns[ExpectedDeliveryDateKey]" />
+                    <inputColumn
+                      refId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].Columns[DeliveryDateKey]"
+                      cachedDataType="i4"
+                      cachedName="DeliveryDateKey"
+                      externalMetadataColumnId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryDateKey]"
+                      lineageId="Package\ETL - Delivery_Fact\Lookup for DeliveryDate.Outputs[Lookup Match Output].Columns[DeliveryDateKey]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -518,14 +518,6 @@
                       refId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[POID]"
                       dataType="i4"
                       name="POID" />
-                    <externalMetadataColumn
-                      refId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryDate]"
-                      dataType="dbDate"
-                      name="DeliveryDate" />
-                    <externalMetadataColumn
-                      refId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[ExpectedDeliveryDate]"
-                      dataType="dbDate"
-                      name="ExpectedDeliveryDate" />
                     <externalMetadataColumn
                       refId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[OnTimeDelivery]"
                       dataType="bool"
@@ -549,9 +541,13 @@
                       length="50"
                       name="TrackingNumber" />
                     <externalMetadataColumn
-                      refId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryKey]"
+                      refId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[DeliveryDateKey]"
                       dataType="i4"
-                      name="DeliveryKey" />
+                      name="DeliveryDateKey" />
+                    <externalMetadataColumn
+                      refId="Package\ETL - Delivery_Fact\Load to the Delivery_Fact.Inputs[OLE DB Destination Input].ExternalColumns[ExpectedDeliveryDateKey]"
+                      dataType="i4"
+                      name="ExpectedDeliveryDateKey" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -632,7 +628,7 @@ where [refTable].[FullDate] = ?</property>
                 <property
                   dataType="System.String"
                   description="Indicates whether to reference metadata in an XML format."
-                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="DateKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FullDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Year" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Quarter" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Month" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Week" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayOfWeek" dataType="DT_STR" length="10" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="TimeKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="DateKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FullDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Year" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Quarter" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Month" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Week" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayOfWeek" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
                 <property
                   containsID="true"
                   dataType="System.String"
@@ -661,23 +657,19 @@ where [refTable].[FullDate] = ?</property>
                   name="Lookup Input">
                   <inputColumns>
                     <inputColumn
-                      refId="Package\ETL - Delivery_Fact\Lookup for DeliveryDate.Inputs[Lookup Input].Columns[FullDate]"
+                      refId="Package\ETL - Delivery_Fact\Lookup for DeliveryDate.Inputs[Lookup Input].Columns[DeliveryDate]"
                       cachedDataType="dbDate"
                       cachedName="DeliveryDate"
-                      errorOrTruncationOperation="Copy Column"
-                      lineageId="Package\ETL - Delivery_Fact\Extract Delivery from the Datasource.Outputs[OLE DB Source Output].Columns[DeliveryDate]"
-                      name="FullDate"
-                      truncationRowDisposition="FailComponent"
-                      usageType="readWrite">
+                      lineageId="Package\ETL - Delivery_Fact\Extract Delivery from the Datasource.Outputs[OLE DB Source Output].Columns[DeliveryDate]">
                       <properties>
                         <property
                           dataType="System.String"
                           description="Specifies the column in the reference table that a column joins."
                           name="JoinToReferenceColumn">FullDate</property>
                         <property
-                          dataType="System.String"
+                          dataType="System.Null"
                           description="Specifies the column in the reference table from which a column is copied."
-                          name="CopyFromReferenceColumn">FullDate</property>
+                          name="CopyFromReferenceColumn" />
                       </properties>
                     </inputColumn>
                   </inputColumns>
@@ -692,6 +684,22 @@ where [refTable].[FullDate] = ?</property>
                   exclusionGroup="1"
                   name="Lookup Match Output"
                   synchronousInputId="Package\ETL - Delivery_Fact\Lookup for DeliveryDate.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL - Delivery_Fact\Lookup for DeliveryDate.Outputs[Lookup Match Output].Columns[DeliveryDateKey]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Copy Column"
+                      lineageId="Package\ETL - Delivery_Fact\Lookup for DeliveryDate.Outputs[Lookup Match Output].Columns[DeliveryDateKey]"
+                      name="DeliveryDateKey"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">DateKey</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
                   <externalMetadataColumns />
                 </output>
                 <output
@@ -778,7 +786,7 @@ where [refTable].[FullDate] = ?</property>
                 <property
                   dataType="System.String"
                   description="Indicates whether to reference metadata in an XML format."
-                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="DateKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FullDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Year" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Quarter" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Month" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Week" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayOfWeek" dataType="DT_STR" length="10" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="TimeKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="DateKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FullDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Year" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Quarter" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Month" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Week" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayOfWeek" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
                 <property
                   containsID="true"
                   dataType="System.String"
@@ -807,23 +815,19 @@ where [refTable].[FullDate] = ?</property>
                   name="Lookup Input">
                   <inputColumns>
                     <inputColumn
-                      refId="Package\ETL - Delivery_Fact\Lookup for Expected Delivery.Inputs[Lookup Input].Columns[FullDate]"
+                      refId="Package\ETL - Delivery_Fact\Lookup for Expected Delivery.Inputs[Lookup Input].Columns[ExpectedDeliveryDate]"
                       cachedDataType="dbDate"
                       cachedName="ExpectedDeliveryDate"
-                      errorOrTruncationOperation="Copy Column"
-                      lineageId="Package\ETL - Delivery_Fact\Extract Delivery from the Datasource.Outputs[OLE DB Source Output].Columns[ExpectedDeliveryDate]"
-                      name="FullDate"
-                      truncationRowDisposition="FailComponent"
-                      usageType="readWrite">
+                      lineageId="Package\ETL - Delivery_Fact\Extract Delivery from the Datasource.Outputs[OLE DB Source Output].Columns[ExpectedDeliveryDate]">
                       <properties>
                         <property
                           dataType="System.String"
                           description="Specifies the column in the reference table that a column joins."
                           name="JoinToReferenceColumn">FullDate</property>
                         <property
-                          dataType="System.String"
+                          dataType="System.Null"
                           description="Specifies the column in the reference table from which a column is copied."
-                          name="CopyFromReferenceColumn">FullDate</property>
+                          name="CopyFromReferenceColumn" />
                       </properties>
                     </inputColumn>
                   </inputColumns>
@@ -838,6 +842,22 @@ where [refTable].[FullDate] = ?</property>
                   exclusionGroup="1"
                   name="Lookup Match Output"
                   synchronousInputId="Package\ETL - Delivery_Fact\Lookup for Expected Delivery.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL - Delivery_Fact\Lookup for Expected Delivery.Outputs[Lookup Match Output].Columns[ExpectedDeliveryDateKey]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Copy Column"
+                      lineageId="Package\ETL - Delivery_Fact\Lookup for Expected Delivery.Outputs[Lookup Match Output].Columns[ExpectedDeliveryDateKey]"
+                      name="ExpectedDeliveryDateKey"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">DateKey</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
                   <externalMetadataColumns />
                 </output>
                 <output
@@ -4054,6 +4074,28 @@ where [refTable].[POID] = ?</property>
                       cachedName="POID"
                       externalMetadataColumnId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input].ExternalColumns[POID]"
                       lineageId="Package\ETL - PurchaseOrder_Fact\Extract from PurchaseOrderLineItem.Outputs[OLE DB Source Output].Columns[POID]" />
+                    <inputColumn
+                      refId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input].Columns[Net Sales Before Tax]"
+                      cachedDataType="numeric"
+                      cachedName="Net Sales Before Tax"
+                      cachedPrecision="11"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input].ExternalColumns[NetSalesBeforeTax]"
+                      lineageId="Package\ETL - PurchaseOrder_Fact\Net Sales Before Tax.Outputs[Derived Column Output].Columns[Net Sales Before Tax]" />
+                    <inputColumn
+                      refId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input].Columns[Net Sales After Tax]"
+                      cachedDataType="numeric"
+                      cachedName="Net Sales After Tax"
+                      cachedPrecision="12"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input].ExternalColumns[NetSalesAfterTax]"
+                      lineageId="Package\ETL - PurchaseOrder_Fact\Net Sales After Tax.Outputs[Derived Column Output].Columns[Net Sales After Tax]" />
+                    <inputColumn
+                      refId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input].Columns[PODateKey]"
+                      cachedDataType="i4"
+                      cachedName="PODateKey"
+                      externalMetadataColumnId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input].ExternalColumns[PODateKey]"
+                      lineageId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Outputs[Lookup Match Output].Columns[PODateKey]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -4107,6 +4149,22 @@ where [refTable].[POID] = ?</property>
                       refId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input].ExternalColumns[PurchaseOrderKey]"
                       dataType="i4"
                       name="PurchaseOrderKey" />
+                    <externalMetadataColumn
+                      refId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input].ExternalColumns[NetSalesBeforeTax]"
+                      dataType="numeric"
+                      name="NetSalesBeforeTax"
+                      precision="11"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input].ExternalColumns[NetSalesAfterTax]"
+                      dataType="numeric"
+                      name="NetSalesAfterTax"
+                      precision="12"
+                      scale="2" />
+                    <externalMetadataColumn
+                      refId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input].ExternalColumns[PODateKey]"
+                      dataType="dbDate"
+                      name="PODateKey" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -4310,6 +4368,164 @@ where [refTable].[POID] = ?</property>
                       refId="Package\ETL - PurchaseOrder_Fact\Net Sales Before Tax.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
                       dataType="i4"
                       lineageId="Package\ETL - PurchaseOrder_Fact\Net Sales Before Tax.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ETL - PurchaseOrder_Fact\PODate Lookup"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+              description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+              name="PODate Lookup"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SQL statement that generates the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [dbo].[Time_Dim]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (select * from [dbo].[Time_Dim]) [refTable]
+where [refTable].[FullDate] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the type of connection used to access the reference dataset."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the cache type of the lookup table."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Indicates whether to reference metadata in an XML format."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="DateKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FullDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Year" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Quarter" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Month" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Week" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayOfWeek" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                  name="ParameterMap">#{Package\ETL - PurchaseOrder_Fact\PurchaseOrder Lookup.Outputs[Lookup Match Output].Columns[PODate]};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[localhost.VendorManagementDW2]"
+                  connectionManagerRefId="Package.ConnectionManagers[localhost.VendorManagementDW2]"
+                  description="Connection manager used to access lookup data."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Inputs[Lookup Input]"
+                  name="Lookup Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Inputs[Lookup Input].Columns[PODate]"
+                      cachedDataType="dbDate"
+                      cachedName="PODate"
+                      lineageId="Package\ETL - PurchaseOrder_Fact\PurchaseOrder Lookup.Outputs[Lookup Match Output].Columns[PODate]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table that a column joins."
+                          name="JoinToReferenceColumn">FullDate</property>
+                        <property
+                          dataType="System.Null"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Outputs[Lookup Match Output]"
+                  errorOrTruncationOperation="Lookup"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="Lookup Match Output"
+                  synchronousInputId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Outputs[Lookup Match Output].Columns[PODateKey]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Copy Column"
+                      lineageId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Outputs[Lookup Match Output].Columns[PODateKey]"
+                      name="PODateKey"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">DateKey</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Outputs[Lookup No Match Output]"
+                  description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                  exclusionGroup="1"
+                  name="Lookup No Match Output"
+                  synchronousInputId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Outputs[Lookup Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Lookup Error Output"
+                  synchronousInputId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Outputs[Lookup Error Output].Columns[ErrorColumn]"
                       name="ErrorColumn"
                       specialFlags="2" />
                   </outputColumns>
@@ -4585,6 +4801,20 @@ where [refTable].[POID] = ?</property>
                           name="CopyFromReferenceColumn">POID</property>
                       </properties>
                     </outputColumn>
+                    <outputColumn
+                      refId="Package\ETL - PurchaseOrder_Fact\PurchaseOrder Lookup.Outputs[Lookup Match Output].Columns[PODate]"
+                      dataType="dbDate"
+                      errorOrTruncationOperation="Copy Column"
+                      lineageId="Package\ETL - PurchaseOrder_Fact\PurchaseOrder Lookup.Outputs[Lookup Match Output].Columns[PODate]"
+                      name="PODate"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">PODate</property>
+                      </properties>
+                    </outputColumn>
                   </outputColumns>
                   <externalMetadataColumns />
                 </output>
@@ -4629,7 +4859,7 @@ where [refTable].[POID] = ?</property>
               startId="Package\ETL - PurchaseOrder_Fact\Net Sales Before Tax.Outputs[Derived Column Output]" />
             <path
               refId="Package\ETL - PurchaseOrder_Fact.Paths[Derived Column Output1]"
-              endId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input]"
+              endId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Inputs[Lookup Input]"
               name="Derived Column Output"
               startId="Package\ETL - PurchaseOrder_Fact\Net Sales After Tax.Outputs[Derived Column Output]" />
             <path
@@ -4642,6 +4872,11 @@ where [refTable].[POID] = ?</property>
               endId="Package\ETL - PurchaseOrder_Fact\Net Sales Before Tax.Inputs[Derived Column Input]"
               name="Lookup Match Output"
               startId="Package\ETL - PurchaseOrder_Fact\Product Lookup.Outputs[Lookup Match Output]" />
+            <path
+              refId="Package\ETL - PurchaseOrder_Fact.Paths[Lookup Match Output2]"
+              endId="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact.Inputs[OLE DB Destination Input]"
+              name="Lookup Match Output"
+              startId="Package\ETL - PurchaseOrder_Fact\PODate Lookup.Outputs[Lookup Match Output]" />
             <path
               refId="Package\ETL - PurchaseOrder_Fact.Paths[OLE DB Source Output]"
               endId="Package\ETL - PurchaseOrder_Fact\PurchaseOrder Lookup.Inputs[Lookup Input]"
@@ -5053,12 +5288,6 @@ where [refTable].[POID] = ?</property>
                       externalMetadataColumnId="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact.Inputs[OLE DB Destination Input].ExternalColumns[RejectionReason]"
                       lineageId="Package\ETL - RecieptInspection\Extract from RecieptInspection Datasource.Outputs[OLE DB Source Output].Columns[RejectionReason]" />
                     <inputColumn
-                      refId="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact.Inputs[OLE DB Destination Input].Columns[InspectionDate]"
-                      cachedDataType="dbDate"
-                      cachedName="InspectionDate"
-                      externalMetadataColumnId="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact.Inputs[OLE DB Destination Input].ExternalColumns[InspectionDate]"
-                      lineageId="Package\ETL - RecieptInspection\Extract from RecieptInspection Datasource.Outputs[OLE DB Source Output].Columns[InspectionDate]" />
-                    <inputColumn
                       refId="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact.Inputs[OLE DB Destination Input].Columns[InspectionNotes]"
                       cachedCodepage="1252"
                       cachedDataType="text"
@@ -5077,6 +5306,12 @@ where [refTable].[POID] = ?</property>
                       cachedName="EmployeeID"
                       externalMetadataColumnId="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact.Inputs[OLE DB Destination Input].ExternalColumns[EmployeeID]"
                       lineageId="Package\ETL - RecieptInspection\Extract from RecieptInspection Datasource.Outputs[OLE DB Source Output].Columns[EmployeeID]" />
+                    <inputColumn
+                      refId="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact.Inputs[OLE DB Destination Input].Columns[InspectionDateKey]"
+                      cachedDataType="i4"
+                      cachedName="InspectionDateKey"
+                      externalMetadataColumnId="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact.Inputs[OLE DB Destination Input].ExternalColumns[InspectionDateKey]"
+                      lineageId="Package\ETL - RecieptInspection\Lookup for InspectionDate.Outputs[Lookup Match Output].Columns[InspectionDateKey]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
@@ -5115,10 +5350,6 @@ where [refTable].[POID] = ?</property>
                       dataType="i4"
                       name="EmployeeID" />
                     <externalMetadataColumn
-                      refId="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact.Inputs[OLE DB Destination Input].ExternalColumns[InspectionDate]"
-                      dataType="dbDate"
-                      name="InspectionDate" />
-                    <externalMetadataColumn
                       refId="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact.Inputs[OLE DB Destination Input].ExternalColumns[InspectionNotes]"
                       codePage="1252"
                       dataType="text"
@@ -5127,6 +5358,10 @@ where [refTable].[POID] = ?</property>
                       refId="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact.Inputs[OLE DB Destination Input].ExternalColumns[ReceiptInspectionKey]"
                       dataType="i4"
                       name="ReceiptInspectionKey" />
+                    <externalMetadataColumn
+                      refId="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact.Inputs[OLE DB Destination Input].ExternalColumns[InspectionDateKey]"
+                      dataType="i4"
+                      name="InspectionDateKey" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
@@ -5352,7 +5587,7 @@ where [refTable].[FullDate] = ?</property>
                 <property
                   dataType="System.String"
                   description="Indicates whether to reference metadata in an XML format."
-                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="DateKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FullDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Year" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Quarter" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Month" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Week" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayOfWeek" dataType="DT_STR" length="10" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="TimeKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="DateKey" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="FullDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Year" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Quarter" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Month" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="Week" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="DayOfWeek" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
                 <property
                   containsID="true"
                   dataType="System.String"
@@ -5381,23 +5616,19 @@ where [refTable].[FullDate] = ?</property>
                   name="Lookup Input">
                   <inputColumns>
                     <inputColumn
-                      refId="Package\ETL - RecieptInspection\Lookup for InspectionDate.Inputs[Lookup Input].Columns[FullDate]"
+                      refId="Package\ETL - RecieptInspection\Lookup for InspectionDate.Inputs[Lookup Input].Columns[InspectionDate]"
                       cachedDataType="dbDate"
                       cachedName="InspectionDate"
-                      errorOrTruncationOperation="Copy Column"
-                      lineageId="Package\ETL - RecieptInspection\Extract from RecieptInspection Datasource.Outputs[OLE DB Source Output].Columns[InspectionDate]"
-                      name="FullDate"
-                      truncationRowDisposition="FailComponent"
-                      usageType="readWrite">
+                      lineageId="Package\ETL - RecieptInspection\Extract from RecieptInspection Datasource.Outputs[OLE DB Source Output].Columns[InspectionDate]">
                       <properties>
                         <property
                           dataType="System.String"
                           description="Specifies the column in the reference table that a column joins."
                           name="JoinToReferenceColumn">FullDate</property>
                         <property
-                          dataType="System.String"
+                          dataType="System.Null"
                           description="Specifies the column in the reference table from which a column is copied."
-                          name="CopyFromReferenceColumn">FullDate</property>
+                          name="CopyFromReferenceColumn" />
                       </properties>
                     </inputColumn>
                   </inputColumns>
@@ -5412,6 +5643,22 @@ where [refTable].[FullDate] = ?</property>
                   exclusionGroup="1"
                   name="Lookup Match Output"
                   synchronousInputId="Package\ETL - RecieptInspection\Lookup for InspectionDate.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL - RecieptInspection\Lookup for InspectionDate.Outputs[Lookup Match Output].Columns[InspectionDateKey]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Copy Column"
+                      lineageId="Package\ETL - RecieptInspection\Lookup for InspectionDate.Outputs[Lookup Match Output].Columns[InspectionDateKey]"
+                      name="InspectionDateKey"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">DateKey</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
                   <externalMetadataColumns />
                 </output>
                 <output
@@ -8323,65 +8570,53 @@ where [refTable].[ProductID] = ?</property>
         <NodeLayout
           Size="170.4,41.6"
           Id="Package\ETL - Delivery_Fact"
-          TopLeft="422.499976915619,207.999998553594" />
+          TopLeft="418.333310476609,147.333332308796" />
         <NodeLayout
           Size="171.2,41.6"
           Id="Package\ETL - EmployeeDim"
-          TopLeft="140.83332563854,339.73333097087" />
+          TopLeft="99.1666612484396,313.733331151671" />
         <NodeLayout
           Size="145.6,41.6"
           Id="Package\ETL - Location"
-          TopLeft="55.8333302827346,254.799998228153" />
+          TopLeft="32.4999982242782,253.066664906873" />
         <NodeLayout
           Size="160.8,41.6"
           Id="Package\ETL - ProductDim"
-          TopLeft="85.833328643607,118.733332507677" />
+          TopLeft="16.6666657560402,112.666665883197" />
         <NodeLayout
           Size="203.2,41.6"
           Id="Package\ETL - PurchaseOrder_Fact"
-          TopLeft="543.33330364691,110.933332561917" />
+          TopLeft="253.333319491811,78.8666661182379" />
         <NodeLayout
           Size="189.6,41.6"
           Id="Package\ETL - RecieptInspection"
-          TopLeft="404.999977871776,302.466664563351" />
+          TopLeft="349.999980876843,235.733331694073" />
         <NodeLayout
           Size="129.6,41.6"
           Id="Package\ETL - Time"
-          TopLeft="66.6666630241607,40.7333330500789" />
+          TopLeft="90.833328370419,45.0666663532788" />
         <NodeLayout
           Size="140,41.6"
           Id="Package\ETL - Vendor"
-          TopLeft="53.3333304193286,186.333332037595" />
+          TopLeft="31.6666649364764,188.933332019515" />
         <NodeLayout
           Size="191.2,41.6"
           Id="Package\ETL - VendorAgreement"
-          TopLeft="274.999984974663,49.3999996564788" />
+          TopLeft="202.499988935888,171.599998806715" />
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint]"
-          TopLeft="166.233328643607,160.333332507677">
+          TopLeft="99.3666653462583,154.266665883197">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-42.8999982242784,25.9999995299185"
+              EndConnector="0,34.6666661363177"
               Start="0,0"
-              End="-42.8999982242784,18.4999995299185">
+              End="0,27.1666661363177">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,8.99999976495923" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,8.99999976495923"
-                    Point2="0,12.9999997649592"
-                    Point3="-4,12.9999997649592" />
-                  <mssgle:LineSegment
-                    End="-38.8999982242784,12.9999997649592" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-38.8999982242784,12.9999997649592"
-                    Point2="-42.8999982242784,12.9999997649592"
-                    Point3="-42.8999982242784,16.9999997649592" />
-                  <mssgle:LineSegment
-                    End="-42.8999982242784,18.4999995299185" />
+                    End="0,27.1666661363177" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8392,18 +8627,18 @@ where [refTable].[ProductID] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 1]"
-          TopLeft="125.983330351032,227.933332037595">
+          TopLeft="103.483331580377,230.533332019515">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,26.8666661905578"
+              EndConnector="0,22.5333328873581"
               Start="0,0"
-              End="0,19.3666661905578">
+              End="0,15.0333328873581">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,19.3666661905578" />
+                    End="0,15.0333328873581" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8414,30 +8649,24 @@ where [refTable].[ProductID] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 2]"
-          TopLeft="128.633330282735,296.399998228153">
+          TopLeft="178.099998224278,273.866664906873">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="70.5999953558054,43.333332742717"
+              EndConnector="-20.5333369758387,39.8666662447977"
               Start="0,0"
-              End="70.5999953558054,35.833332742717">
+              End="-20.5333369758387,32.3666662447977">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,21.7592589081707" />
+                    End="-16.5333369758387,0" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,21.7592589081707"
-                    Point2="0,25.7592589081707"
-                    Point3="4,25.7592589081707" />
+                    Point1="-16.5333369758387,0"
+                    Point2="-20.5333369758387,0"
+                    Point3="-20.5333369758387,4" />
                   <mssgle:LineSegment
-                    End="66.5999953558054,25.7592589081707" />
-                  <mssgle:CubicBezierSegment
-                    Point1="66.5999953558054,25.7592589081707"
-                    Point2="70.5999953558054,25.7592589081707"
-                    Point3="70.5999953558054,29.7592589081707" />
-                  <mssgle:LineSegment
-                    End="70.5999953558054,35.833332742717" />
+                    End="-20.5333369758387,32.3666662447977" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8448,30 +8677,30 @@ where [refTable].[ProductID] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 3]"
-          TopLeft="253.63332563854,339.73333097087">
+          TopLeft="211.96666124844,313.733331151671">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="116.966659336123,-248.733331314391"
+              EndConnector="86.1333276874486,-100.533332344955"
               Start="0,0"
-              End="116.966659336123,-241.233331314391">
+              End="86.1333276874486,-93.0333323449554">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,-96.875184366392" />
+                    End="0,-36.7718514510097" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,-96.875184366392"
-                    Point2="0,-100.875184366392"
-                    Point3="4,-100.875184366392" />
+                    Point1="0,-36.7718514510097"
+                    Point2="0,-40.7718514510097"
+                    Point3="4,-40.7718514510097" />
                   <mssgle:LineSegment
-                    End="112.966659336123,-100.875184366392" />
+                    End="82.1333276874486,-40.7718514510097" />
                   <mssgle:CubicBezierSegment
-                    Point1="112.966659336123,-100.875184366392"
-                    Point2="116.966659336123,-100.875184366392"
-                    Point3="116.966659336123,-104.875184366392" />
+                    Point1="82.1333276874486,-40.7718514510097"
+                    Point2="86.1333276874486,-40.7718514510097"
+                    Point3="86.1333276874486,-44.7718514510097" />
                   <mssgle:LineSegment
-                    End="116.966659336123,-241.233331314391" />
+                    End="86.1333276874486,-93.0333323449554" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8482,30 +8711,30 @@ where [refTable].[ProductID] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 4]"
-          TopLeft="131.466663024161,82.3333330500789">
+          TopLeft="155.633328370419,86.6666663532788">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="34.7666656194463,36.3999994575978"
+              EndConnector="-58.5666626143787,25.9999995299184"
               Start="0,0"
-              End="34.7666656194463,28.8999994575978">
+              End="-58.5666626143787,18.4999995299184">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,14.1999997287989" />
+                    End="0,8.99999976495921" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,14.1999997287989"
-                    Point2="0,18.1999997287989"
-                    Point3="4,18.1999997287989" />
+                    Point1="0,8.99999976495921"
+                    Point2="0,12.9999997649592"
+                    Point3="-4,12.9999997649592" />
                   <mssgle:LineSegment
-                    End="30.7666656194463,18.1999997287989" />
+                    End="-54.5666626143787,12.9999997649592" />
                   <mssgle:CubicBezierSegment
-                    Point1="30.7666656194463,18.1999997287989"
-                    Point2="34.7666656194463,18.1999997287989"
-                    Point3="34.7666656194463,22.1999997287989" />
+                    Point1="-54.5666626143787,12.9999997649592"
+                    Point2="-58.5666626143787,12.9999997649592"
+                    Point3="-58.5666626143787,16.9999997649592" />
                   <mssgle:LineSegment
-                    End="34.7666656194463,28.8999994575978" />
+                    End="-58.5666626143787,18.4999995299184" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8516,30 +8745,30 @@ where [refTable].[ProductID] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 5]"
-          TopLeft="466.199984974663,70.1999996564788">
+          TopLeft="298.099988935888,171.599998806715">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="77.1333186722468,61.5333329054383"
+              EndConnector="24.2999972225892,-51.1333326884773"
               Start="0,0"
-              End="69.6333186722468,61.5333329054383">
+              End="24.2999972225892,-43.6333326884773">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="34.5666593361234,0" />
+                    End="0,-26.4403121161092" />
                   <mssgle:CubicBezierSegment
-                    Point1="34.5666593361234,0"
-                    Point2="38.5666593361234,0"
-                    Point3="38.5666593361234,4" />
+                    Point1="0,-26.4403121161092"
+                    Point2="0,-30.4403121161092"
+                    Point3="4,-30.4403121161092" />
                   <mssgle:LineSegment
-                    End="38.5666593361234,57.5333329054383" />
+                    End="20.2999972225892,-30.4403121161092" />
                   <mssgle:CubicBezierSegment
-                    Point1="38.5666593361234,57.5333329054383"
-                    Point2="38.5666593361234,61.5333329054383"
-                    Point3="42.5666593361234,61.5333329054383" />
+                    Point1="20.2999972225892,-30.4403121161092"
+                    Point2="24.2999972225892,-30.4403121161092"
+                    Point3="24.2999972225892,-34.4403121161092" />
                   <mssgle:LineSegment
-                    End="69.6333186722468,61.5333329054383" />
+                    End="24.2999972225892,-43.6333326884773" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8550,30 +8779,30 @@ where [refTable].[ProductID] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 6]"
-          TopLeft="644.93330364691,152.533332561917">
+          TopLeft="387.466652825144,120.466666118238">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-137.233326731291,55.4666659916766"
+              EndConnector="116.066657651465,26.8666661905578"
               Start="0,0"
-              End="-137.233326731291,47.9666659916766">
+              End="116.066657651465,19.3666661905578">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,23.7333329958383" />
+                    End="0,6.87260397399136" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,23.7333329958383"
-                    Point2="0,27.7333329958383"
-                    Point3="-4,27.7333329958383" />
+                    Point1="0,6.87260397399136"
+                    Point2="0,10.8726039739914"
+                    Point3="4,10.8726039739914" />
                   <mssgle:LineSegment
-                    End="-133.233326731291,27.7333329958383" />
+                    End="112.066657651465,10.8726039739914" />
                   <mssgle:CubicBezierSegment
-                    Point1="-133.233326731291,27.7333329958383"
-                    Point2="-137.233326731291,27.7333329958383"
-                    Point3="-137.233326731291,31.7333329958383" />
+                    Point1="112.066657651465,10.8726039739914"
+                    Point2="116.066657651465,10.8726039739914"
+                    Point3="116.066657651465,14.8726039739914" />
                   <mssgle:LineSegment
-                    End="-137.233326731291,47.9666659916766" />
+                    End="116.066657651465,19.3666661905578" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8584,18 +8813,30 @@ where [refTable].[ProductID] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package.PrecedenceConstraints[Constraint 7]"
-          TopLeft="503.749977393697,249.599998553594">
+          TopLeft="503.533310476609,188.933332308796">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,52.8666660097574"
+              EndConnector="-58.7333295997655,46.7999993852771"
               Start="0,0"
-              End="0,45.3666660097574">
+              End="-58.7333295997655,39.2999993852771">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,45.3666660097574" />
+                    End="0,19.3999996926385" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,19.3999996926385"
+                    Point2="0,23.3999996926385"
+                    Point3="-4,23.3999996926385" />
+                  <mssgle:LineSegment
+                    End="-54.7333295997655,23.3999996926385" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-54.7333295997655,23.3999996926385"
+                    Point2="-58.7333295997655,23.3999996926385"
+                    Point3="-58.7333295997655,27.3999996926385" />
+                  <mssgle:LineSegment
+                    End="-58.7333295997655,39.2999993852771" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8674,33 +8915,33 @@ where [refTable].[ProductID] = ?</property>
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="229.466662464539,-33.3999988824128"
+              EndConnector="229.46666246454,-33.399998882413"
               Start="0,0"
-              End="229.466662464539,-25.8999988824128">
+              End="229.46666246454,-25.899998882413">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,-12.7194063108215" />
+                    End="0,-12.7194063108216" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,-12.7194063108215"
-                    Point2="0,-16.7194063108215"
-                    Point3="4,-16.7194063108215" />
+                    Point1="0,-12.7194063108216"
+                    Point2="0,-16.7194063108216"
+                    Point3="4,-16.7194063108216" />
                   <mssgle:LineSegment
-                    End="225.466662464539,-16.7194063108215" />
+                    End="225.46666246454,-16.7194063108216" />
                   <mssgle:CubicBezierSegment
-                    Point1="225.466662464539,-16.7194063108215"
-                    Point2="229.466662464539,-16.7194063108215"
-                    Point3="229.466662464539,-20.7194063108215" />
+                    Point1="225.46666246454,-16.7194063108216"
+                    Point2="229.46666246454,-16.7194063108216"
+                    Point3="229.46666246454,-20.7194063108216" />
                   <mssgle:LineSegment
-                    End="229.466662464539,-25.8999988824128" />
+                    End="229.46666246454,-25.899998882413" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="66.5419445135195,-11.7194063108215,96.3827734375,11.609375"
+              BoundingBox="66.5419445135198,-11.7194063108216,96.3827734375,11.609375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
@@ -8710,33 +8951,33 @@ where [refTable].[ProductID] = ?</property>
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="126.799998360872,54.3999985694886"
+              EndConnector="96.5333316942054,54.399998569489"
               Start="0,0"
-              End="126.799998360872,46.8999985694886">
+              End="96.5333316942054,46.899998569489">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,23.1999992847443" />
+                    End="0,28.3668610735621" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,23.1999992847443"
-                    Point2="0,27.1999992847443"
-                    Point3="4,27.1999992847443" />
+                    Point1="0,28.3668610735621"
+                    Point2="0,32.3668610735621"
+                    Point3="4,32.3668610735621" />
                   <mssgle:LineSegment
-                    End="122.799998360872,27.1999992847443" />
+                    End="92.5333316942054,32.3668610735621" />
                   <mssgle:CubicBezierSegment
-                    Point1="122.799998360872,27.1999992847443"
-                    Point2="126.799998360872,27.1999992847443"
-                    Point3="126.799998360872,31.1999992847443" />
+                    Point1="92.5333316942054,32.3668610735621"
+                    Point2="96.5333316942054,32.3668610735621"
+                    Point3="96.5333316942054,36.3668610735621" />
                   <mssgle:LineSegment
-                    End="126.799998360872,46.8999985694886" />
+                    End="96.5333316942054,46.899998569489" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="15.208612461686,32.1999992847443,96.3827734375,11.609375"
+              BoundingBox="0.0752791283526832,37.3668610735621,96.3827734375,11.609375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
@@ -8796,7 +9037,7 @@ where [refTable].[ProductID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -8806,7 +9047,7 @@ where [refTable].[ProductID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -8855,7 +9096,7 @@ where [refTable].[ProductID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -8865,7 +9106,7 @@ where [refTable].[ProductID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -9325,45 +9566,45 @@ where [refTable].[ProductID] = ?</property>
         <NodeLayout
           Size="247.2,41.6"
           Id="Package\ETL - PurchaseOrder_Fact\Extract from PurchaseOrderLineItem"
-          TopLeft="135.999997973442,64.9999990314245" />
+          TopLeft="42.9999993592499,57.599999165535" />
         <NodeLayout
           Size="151.2,41.6"
           Id="Package\ETL - PurchaseOrder_Fact\Product Lookup"
-          TopLeft="411.999993860721,138.999997928739" />
+          TopLeft="354.999994710087,62.9999990612272" />
         <NodeLayout
           Size="229.6,41.6"
           Id="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact"
-          TopLeft="142.999997869134,316.999995276332" />
+          TopLeft="142.999997869134,330.599995097518" />
         <NodeLayout
           Size="185.6,41.6"
           Id="Package\ETL - PurchaseOrder_Fact\PurchaseOrder Lookup"
-          TopLeft="140.999997898936,135.19999833107" />
+          TopLeft="82.9999987632036,159.799997988343" />
         <EdgeLayout
           Id="Package\ETL - PurchaseOrder_Fact.Paths[OLE DB Source Output]"
-          TopLeft="259.599997973442,106.599999031425">
+          TopLeft="166.59999935925,99.199999165535">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-25.8000000745057,28.5999992996454"
+              EndConnector="-20.4000005960463,60.5999988228083"
               Start="0,0"
-              End="-25.8000000745057,21.0999992996454">
+              End="-20.4000005960463,53.0999988228083">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,10.2999996498227" />
+                    End="0,32.0492300689526" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,10.2999996498227"
-                    Point2="0,14.2999996498227"
-                    Point3="-4,14.2999996498227" />
+                    Point1="0,32.0492300689526"
+                    Point2="0,36.0492300689526"
+                    Point3="-4,36.0492300689526" />
                   <mssgle:LineSegment
-                    End="-21.8000000745057,14.2999996498227" />
+                    End="-16.4000005960463,36.0492300689526" />
                   <mssgle:CubicBezierSegment
-                    Point1="-21.8000000745057,14.2999996498227"
-                    Point2="-25.8000000745057,14.2999996498227"
-                    Point3="-25.8000000745057,18.2999996498227" />
+                    Point1="-16.4000005960463,36.0492300689526"
+                    Point2="-20.4000005960463,36.0492300689526"
+                    Point3="-20.4000005960463,40.0492300689526" />
                   <mssgle:LineSegment
-                    End="-25.8000000745057,21.0999992996454" />
+                    End="-20.4000005960463,53.0999988228083" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -9374,86 +9615,142 @@ where [refTable].[ProductID] = ?</property>
         </EdgeLayout>
         <EdgeLayout
           Id="Package\ETL - PurchaseOrder_Fact.Paths[Lookup Match Output]"
-          TopLeft="326.599997898936,157.899998129904">
+          TopLeft="205.399998763204,159.799997988343">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="85.3999959617849,0"
+              EndConnector="201.333329280217,-55.1999989271161"
               Start="0,0"
-              End="77.8999959617849,0">
+              End="201.333329280217,-47.6999989271161">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="77.8999959617849,0" />
+                    End="0,-23.5339200225199" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,-23.5339200225199"
+                    Point2="0,-27.5339200225199"
+                    Point3="4,-27.5339200225199" />
+                  <mssgle:LineSegment
+                    End="197.333329280217,-27.5339200225199" />
+                  <mssgle:CubicBezierSegment
+                    Point1="197.333329280217,-27.5339200225199"
+                    Point2="201.333329280217,-27.5339200225199"
+                    Point3="201.333329280217,-31.5339200225199" />
+                  <mssgle:LineSegment
+                    End="201.333329280217,-47.6999989271161" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-9.24138873785756,5,96.3827734375,11.609375"
+              BoundingBox="52.4752779213585,-22.5339200225199,96.3827734375,11.609375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <NodeLayout
           Size="176.8,41.6"
           Id="Package\ETL - PurchaseOrder_Fact\Net Sales Before Tax"
-          TopLeft="408.999993905425,229.199996930361" />
+          TopLeft="470.999992981553,183.799997630715" />
         <EdgeLayout
           Id="Package\ETL - PurchaseOrder_Fact.Paths[Lookup Match Output1]"
-          TopLeft="487.599993860721,180.599997928739">
+          TopLeft="454.466661376754,104.599999061227">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="9.80000004470412,48.5999990016219"
+              EndConnector="104.933331604799,79.1999985694882"
               Start="0,0"
-              End="9.80000004470412,41.0999990016219">
+              End="104.933331604799,71.6999985694882">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,20.299999500811" />
+                    End="0,28.1775910418445" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,20.299999500811"
-                    Point2="0,24.299999500811"
-                    Point3="4,24.299999500811" />
+                    Point1="0,28.1775910418445"
+                    Point2="0,32.1775910418445"
+                    Point3="4,32.1775910418445" />
                   <mssgle:LineSegment
-                    End="5.80000004470412,24.299999500811" />
+                    End="100.933331604799,32.1775910418445" />
                   <mssgle:CubicBezierSegment
-                    Point1="5.80000004470412,24.299999500811"
-                    Point2="9.80000004470412,24.299999500811"
-                    Point3="9.80000004470412,28.299999500811" />
+                    Point1="100.933331604799,32.1775910418445"
+                    Point2="104.933331604799,32.1775910418445"
+                    Point3="104.933331604799,36.1775910418445" />
                   <mssgle:LineSegment
-                    End="9.80000004470412,41.0999990016219" />
+                    End="104.933331604799,71.6999985694882" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="-43.2913866963979,29.299999500811,96.3827734375,11.609375"
+              BoundingBox="4.27527908364971,37.1775910418445,96.3827734375,11.609375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <NodeLayout
           Size="168,41.6"
           Id="Package\ETL - PurchaseOrder_Fact\Net Sales After Tax"
-          TopLeft="160.999997600913,234.799996989965" />
+          TopLeft="361.99999460578,244.399996870756" />
         <EdgeLayout
           Id="Package\ETL - PurchaseOrder_Fact.Paths[Derived Column Output]"
-          TopLeft="408.999993905425,252.799996960163">
+          TopLeft="470.999992981553,204.599997630715">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-79.9999963045121,0"
+              EndConnector="-24.9999983757735,39.7999992400408"
               Start="0,0"
-              End="-72.4999963045121,0">
+              End="-24.9999983757735,32.2999992400408">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="-72.4999963045121,0" />
+                    End="-20.9999983757735,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-20.9999983757735,0"
+                    Point2="-24.9999983757735,0"
+                    Point3="-24.9999983757735,4" />
+                  <mssgle:LineSegment
+                    End="-24.9999983757735,32.2999992400408" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="152,41.6"
+          Id="Package\ETL - PurchaseOrder_Fact\PODate Lookup"
+          TopLeft="481.99999281764,322.399995291233" />
+        <EdgeLayout
+          Id="Package\ETL - PurchaseOrder_Fact.Paths[Derived Column Output1]"
+          TopLeft="445.99999460578,285.999996870756">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="111.999998211861,36.3999984204769"
+              Start="0,0"
+              End="111.999998211861,28.8999984204769">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,14.1999992102385" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,14.1999992102385"
+                    Point2="0,18.1999992102385"
+                    Point3="4,18.1999992102385" />
+                  <mssgle:LineSegment
+                    End="107.999998211861,18.1999992102385" />
+                  <mssgle:CubicBezierSegment
+                    Point1="107.999998211861,18.1999992102385"
+                    Point2="111.999998211861,18.1999992102385"
+                    Point3="111.999998211861,22.1999992102385" />
+                  <mssgle:LineSegment
+                    End="111.999998211861,28.8999984204769" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -9463,37 +9760,39 @@ where [refTable].[ProductID] = ?</property>
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
-          Id="Package\ETL - PurchaseOrder_Fact.Paths[Derived Column Output1]"
-          TopLeft="244.999997600913,276.399996989965">
+          Id="Package\ETL - PurchaseOrder_Fact.Paths[Lookup Match Output2]"
+          TopLeft="481.99999281764,343.199995291233">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="12.8000002682207,40.5999982863661"
+              EndConnector="-109.399994948507,8.1999998062845"
               Start="0,0"
-              End="12.8000002682207,33.0999982863661">
+              End="-101.899994948507,8.1999998062845">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,16.299999143183" />
+                    End="-50.6999974742533,0" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,16.299999143183"
-                    Point2="0,20.299999143183"
-                    Point3="4,20.299999143183" />
+                    Point1="-50.6999974742533,0"
+                    Point2="-54.6999974742533,0"
+                    Point3="-54.6999974742533,4" />
                   <mssgle:LineSegment
-                    End="8.80000026822066,20.299999143183" />
+                    End="-54.6999974742533,4.1999998062845" />
                   <mssgle:CubicBezierSegment
-                    Point1="8.80000026822066,20.299999143183"
-                    Point2="12.8000002682207,20.299999143183"
-                    Point3="12.8000002682207,24.299999143183" />
+                    Point1="-54.6999974742533,4.1999998062845"
+                    Point2="-54.6999974742533,8.1999998062845"
+                    Point3="-58.6999974742533,8.1999998062845" />
                   <mssgle:LineSegment
-                    End="12.8000002682207,33.0999982863661" />
+                    End="-101.899994948507,8.1999998062845" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="-102.891384193003,-17.609375,96.3827734375,11.609375"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -9604,9 +9903,7 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="0,0,0,0"
-              RelativePosition="Any" />
+            <EdgeLabelCollection />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -9641,7 +9938,7 @@ where [refTable].[ProductID] = ?</property>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
             <mssgm:EdgeLabel
-              BoundingBox="84.5086111578347,-10.2190471606594,96.3827734375,11.609375"
+              BoundingBox="84.5086111578345,-10.2190471606594,96.3827734375,11.609375"
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
@@ -9739,7 +10036,7 @@ where [refTable].[ProductID] = ?</property>
       <Property>
         <Name>OverwriteParamsSQLProp</Name>
         <Value
-          type="q2:string">false</Value>
+          type="q2:boolean">false</Value>
       </Property>
       <Property>
         <Name>UsedTableName</Name>
@@ -9749,7 +10046,7 @@ where [refTable].[ProductID] = ?</property>
       <Property>
         <Name>TableInfoObjectType</Name>
         <Value
-          type="q4:string">0</Value>
+          type="q4:int">0</Value>
       </Property>
       <Property>
         <Name>DataSourceViewID</Name>
@@ -10270,6 +10567,29 @@ where [refTable].[ProductID] = ?</property>
         <Name>UsedTableName</Name>
         <Value
           type="q3:string">[dbo].[PurchaseOrder]</Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:int">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\ETL - PurchaseOrder_Fact\PODate Lookup">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:boolean">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string">[dbo].[Time_Dim]</Value>
       </Property>
       <Property>
         <Name>TableInfoObjectType</Name>
