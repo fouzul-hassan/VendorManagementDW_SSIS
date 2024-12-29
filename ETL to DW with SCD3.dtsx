@@ -11,8 +11,8 @@
   DTS:LocaleID="2057"
   DTS:ObjectName="ETL to DW with SCD 3"
   DTS:PackageType="5"
-  DTS:VersionBuild="73"
-  DTS:VersionGUID="{4BC217C7-903D-4A92-9F22-05B6AB840D6E}">
+  DTS:VersionBuild="81"
+  DTS:VersionGUID="{C9AF9D3F-9FE9-4771-B373-760F5D7CC623}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -6318,6 +6318,89 @@ where [refTable].[ProductID] = ?</property>
           version="1">
           <components>
             <component
+              refId="Package\ETL - Vendor\Derived Column"
+              componentClassID="Microsoft.DerivedColumn"
+              contactInfo="Derived Column;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;0"
+              description="Creates new column values by applying expressions to transformation input columns. Create new columns or overwrite existing ones. For example, concatenate the values from the 'first name' and 'last name' column to make a 'full name' column."
+              name="Derived Column"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\ETL - Vendor\Derived Column.Inputs[Derived Column Input]"
+                  description="Input to the Derived Column Transformation"
+                  name="Derived Column Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ETL - Vendor\Derived Column.Inputs[Derived Column Input].Columns[PreviousVendorCategory]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="PreviousVendorCategory"
+                      lineageId="Package\ETL - Vendor\PreviousCategory Lookup.Outputs[Lookup Match Output].Columns[PreviousVendorCategory]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ETL - Vendor\Derived Column.Outputs[Derived Column Output]"
+                  description="Default Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  name="Derived Column Output"
+                  synchronousInputId="Package\ETL - Vendor\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL - Vendor\Derived Column.Outputs[Derived Column Output].Columns[[PreviousVendorCategory]]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Computation"
+                      errorRowDisposition="FailComponent"
+                      length="50"
+                      lineageId="Package\ETL - Vendor\Derived Column.Outputs[Derived Column Output].Columns[[PreviousVendorCategory]]"
+                      name="[PreviousVendorCategory]"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Expression"
+                          name="Expression">#{Package\ETL - Vendor\PreviousCategory Lookup.Outputs[Lookup Match Output].Columns[PreviousVendorCategory]}</property>
+                        <property
+                          containsID="true"
+                          dataType="System.String"
+                          description="Derived Column Friendly Expression"
+                          expressionType="Notify"
+                          name="FriendlyExpression">PreviousVendorCategory</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL - Vendor\Derived Column.Outputs[Derived Column Error Output]"
+                  description="Error Output of the Derived Column Transformation"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Derived Column Error Output"
+                  synchronousInputId="Package\ETL - Vendor\Derived Column.Inputs[Derived Column Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL - Vendor\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ETL - Vendor\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ETL - Vendor\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ETL - Vendor\Derived Column.Outputs[Derived Column Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
               refId="Package\ETL - Vendor\Extract from Vendor Datasource Table"
               componentClassID="Microsoft.OLEDBSource"
               contactInfo="OLE DB Source;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;7"
@@ -6562,11 +6645,11 @@ where [refTable].[ProductID] = ?</property>
               </outputs>
             </component>
             <component
-              refId="Package\ETL - Vendor\Load to the VendorDim"
+              refId="Package\ETL - Vendor\Insert Destination"
               componentClassID="Microsoft.OLEDBDestination"
               contactInfo="OLE DB Destination;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;4"
               description="OLE DB Destination"
-              name="Load to the VendorDim"
+              name="Insert Destination"
               usesDispositions="true"
               version="4">
               <properties>
@@ -6577,7 +6660,7 @@ where [refTable].[ProductID] = ?</property>
                 <property
                   dataType="System.String"
                   description="Specifies the name of the database object used to open a rowset."
-                  name="OpenRowset">[dbo].[Vendor_Dim]</property>
+                  name="OpenRowset">[dbo].[DimVendorSCD3]</property>
                 <property
                   dataType="System.String"
                   description="Specifies the variable that contains the name of the database object used to open a rowset."
@@ -6599,7 +6682,7 @@ where [refTable].[ProductID] = ?</property>
                   dataType="System.Int32"
                   description="Specifies the mode used to access the database."
                   name="AccessMode"
-                  typeConverter="AccessMode">3</property>
+                  typeConverter="AccessMode">0</property>
                 <property
                   dataType="System.Boolean"
                   description="Indicates whether the values supplied for identity columns will be copied to the destination. If false, values for identity columns will be auto-generated at the destination. Applies only if fast load is turned on."
@@ -6611,7 +6694,7 @@ where [refTable].[ProductID] = ?</property>
                 <property
                   dataType="System.String"
                   description="Specifies options to be used with fast load.  Applies only if fast load is turned on."
-                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                  name="FastLoadOptions"></property>
                 <property
                   dataType="System.Int32"
                   description="Specifies when commits are issued during data insertion.  A value of 0 specifies that one commit will be issued at the end of data insertion.  Applies only if fast load is turned on."
@@ -6619,7 +6702,7 @@ where [refTable].[ProductID] = ?</property>
               </properties>
               <connections>
                 <connection
-                  refId="Package\ETL - Vendor\Load to the VendorDim.Connections[OleDbConnection]"
+                  refId="Package\ETL - Vendor\Insert Destination.Connections[OleDbConnection]"
                   connectionManagerID="Package.ConnectionManagers[localhost.VendorManagementDW2]"
                   connectionManagerRefId="Package.ConnectionManagers[localhost.VendorManagementDW2]"
                   description="The OLE DB runtime connection used to access the database."
@@ -6627,130 +6710,144 @@ where [refTable].[ProductID] = ?</property>
               </connections>
               <inputs>
                 <input
-                  refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input]"
+                  refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input]"
                   errorOrTruncationOperation="Insert"
-                  errorRowDisposition="IgnoreFailure"
+                  errorRowDisposition="FailComponent"
                   hasSideEffects="true"
                   name="OLE DB Destination Input">
                   <inputColumns>
                     <inputColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].Columns[VendorID]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].Columns[VendorID]"
                       cachedDataType="i4"
                       cachedName="VendorID"
-                      externalMetadataColumnId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[VendorID]"
+                      externalMetadataColumnId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[VendorID]"
                       lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorID]" />
                     <inputColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].Columns[VendorName]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].Columns[VendorName]"
                       cachedCodepage="1252"
                       cachedDataType="str"
                       cachedLength="100"
                       cachedName="VendorName"
-                      externalMetadataColumnId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[VendorName]"
+                      externalMetadataColumnId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[VendorName]"
                       lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorName]" />
                     <inputColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].Columns[VendorAddress]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].Columns[VendorAddress]"
                       cachedCodepage="1252"
                       cachedDataType="str"
                       cachedLength="255"
                       cachedName="VendorAddress"
-                      externalMetadataColumnId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[VendorAddress]"
+                      externalMetadataColumnId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[VendorAddress]"
                       lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorAddress]" />
                     <inputColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].Columns[ContactInfo]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].Columns[ContactInfo]"
                       cachedCodepage="1252"
                       cachedDataType="str"
                       cachedLength="100"
                       cachedName="ContactInfo"
-                      externalMetadataColumnId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[ContactInfo]"
+                      externalMetadataColumnId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[ContactInfo]"
                       lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[ContactInfo]" />
                     <inputColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].Columns[ApprovedVendor]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].Columns[ApprovedVendor]"
                       cachedDataType="bool"
                       cachedName="ApprovedVendor"
-                      externalMetadataColumnId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[ApprovedVendor]"
+                      externalMetadataColumnId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[ApprovedVendor]"
                       lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[ApprovedVendor]" />
                     <inputColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].Columns[VendorRating]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].Columns[VendorRating]"
                       cachedDataType="numeric"
                       cachedName="VendorRating"
                       cachedPrecision="3"
                       cachedScale="2"
-                      externalMetadataColumnId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[VendorRating]"
+                      externalMetadataColumnId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[VendorRating]"
                       lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorRating]" />
                     <inputColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].Columns[VendorCategory]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].Columns[VendorCategory]"
                       cachedCodepage="1252"
                       cachedDataType="str"
                       cachedLength="50"
                       cachedName="VendorCategory"
-                      externalMetadataColumnId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[VendorCategory]"
+                      externalMetadataColumnId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[VendorCategory]"
                       lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorCategory]" />
                   </inputColumns>
                   <externalMetadataColumns
                     isUsed="True">
                     <externalMetadataColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[VendorID]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[VendorID]"
                       dataType="i4"
                       name="VendorID" />
                     <externalMetadataColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[VendorName]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[VendorName]"
                       codePage="1252"
                       dataType="str"
                       length="100"
                       name="VendorName" />
                     <externalMetadataColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[VendorAddress]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[VendorAddress]"
                       codePage="1252"
                       dataType="str"
                       length="255"
                       name="VendorAddress" />
                     <externalMetadataColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[ContactInfo]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[ContactInfo]"
                       codePage="1252"
                       dataType="str"
                       length="100"
                       name="ContactInfo" />
                     <externalMetadataColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[ApprovedVendor]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[ApprovedVendor]"
                       dataType="bool"
                       name="ApprovedVendor" />
                     <externalMetadataColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[VendorRating]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[VendorRating]"
                       dataType="numeric"
                       name="VendorRating"
                       precision="3"
                       scale="2" />
                     <externalMetadataColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[VendorCategory]"
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[VendorCategory]"
                       codePage="1252"
                       dataType="str"
                       length="50"
                       name="VendorCategory" />
                     <externalMetadataColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input].ExternalColumns[VendorKey]"
-                      dataType="i4"
-                      name="VendorKey" />
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[PreviousVendorCategory]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="PreviousVendorCategory" />
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[StartDate]"
+                      dataType="dbDate"
+                      name="StartDate" />
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[EndDate]"
+                      dataType="dbDate"
+                      name="EndDate" />
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input].ExternalColumns[IsCurrent]"
+                      dataType="bool"
+                      name="IsCurrent" />
                   </externalMetadataColumns>
                 </input>
               </inputs>
               <outputs>
                 <output
-                  refId="Package\ETL - Vendor\Load to the VendorDim.Outputs[OLE DB Destination Error Output]"
+                  refId="Package\ETL - Vendor\Insert Destination.Outputs[OLE DB Destination Error Output]"
                   exclusionGroup="1"
                   isErrorOut="true"
                   name="OLE DB Destination Error Output"
-                  synchronousInputId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input]">
+                  synchronousInputId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input]">
                   <outputColumns>
                     <outputColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      refId="Package\ETL - Vendor\Insert Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
                       dataType="i4"
-                      lineageId="Package\ETL - Vendor\Load to the VendorDim.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
+                      lineageId="Package\ETL - Vendor\Insert Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorCode]"
                       name="ErrorCode"
                       specialFlags="1" />
                     <outputColumn
-                      refId="Package\ETL - Vendor\Load to the VendorDim.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      refId="Package\ETL - Vendor\Insert Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
                       dataType="i4"
-                      lineageId="Package\ETL - Vendor\Load to the VendorDim.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
+                      lineageId="Package\ETL - Vendor\Insert Destination.Outputs[OLE DB Destination Error Output].Columns[ErrorColumn]"
                       name="ErrorColumn"
                       specialFlags="2" />
                   </outputColumns>
@@ -6758,11 +6855,688 @@ where [refTable].[ProductID] = ?</property>
                 </output>
               </outputs>
             </component>
+            <component
+              refId="Package\ETL - Vendor\OLE DB Command"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
+              name="OLE DB Command"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">UPDATE [dbo].[DimVendorSCD3] SET [ApprovedVendor] = ?,[ContactInfo] = ?,[VendorAddress] = ?,[VendorCategory] = ?,[VendorName] = ?,[VendorRating] = ?,[IsCurrent] = '0' WHERE [VendorID] = ? AND [IsCurrent] = '1'</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ETL - Vendor\OLE DB Command.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[localhost.VendorManagementDW2]"
+                  connectionManagerRefId="Package.ConnectionManagers[localhost.VendorManagementDW2]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Command Execution"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].Columns[ApprovedVendor]"
+                      cachedDataType="bool"
+                      cachedName="ApprovedVendor"
+                      externalMetadataColumnId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[ApprovedVendor]" />
+                    <inputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].Columns[ContactInfo]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="ContactInfo"
+                      externalMetadataColumnId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[ContactInfo]" />
+                    <inputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].Columns[VendorAddress]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="255"
+                      cachedName="VendorAddress"
+                      externalMetadataColumnId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
+                      lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorAddress]" />
+                    <inputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].Columns[VendorCategory]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="VendorCategory"
+                      externalMetadataColumnId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
+                      lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorCategory]" />
+                    <inputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].Columns[VendorID]"
+                      cachedDataType="i4"
+                      cachedName="VendorID"
+                      externalMetadataColumnId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_6]"
+                      lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorID]" />
+                    <inputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].Columns[VendorName]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="VendorName"
+                      externalMetadataColumnId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
+                      lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorName]" />
+                    <inputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].Columns[VendorRating]"
+                      cachedDataType="numeric"
+                      cachedName="VendorRating"
+                      cachedPrecision="3"
+                      cachedScale="2"
+                      externalMetadataColumnId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_5]"
+                      lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorRating]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      dataType="bool"
+                      name="Param_0">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="Param_1">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_2]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      name="Param_2">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_3]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="Param_3">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_4]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="Param_4">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_5]"
+                      dataType="numeric"
+                      name="Param_5"
+                      precision="3"
+                      scale="2">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input].ExternalColumns[Param_6]"
+                      dataType="i4"
+                      name="Param_6">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ETL - Vendor\OLE DB Command.Outputs[OLE DB Command Output]"
+                  exclusionGroup="1"
+                  name="OLE DB Command Output"
+                  synchronousInputId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL - Vendor\OLE DB Command.Outputs[OLE DB Command Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ETL - Vendor\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ETL - Vendor\OLE DB Command.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ETL - Vendor\OLE DB Command 1"
+              componentClassID="Microsoft.OLEDBCommand"
+              contactInfo="OLE DB Command;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;2"
+              description="Runs an SQL statement for each row in a data flow. For example, call a 'new employee setup' stored procedure for each row in the 'new employees' table. Note: running an SQL statement for each row of a large data flow may take a long time."
+              name="OLE DB Command 1"
+              usesDispositions="true"
+              version="2">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="The number of seconds before a command times out.  A value of 0 indicates an infinite time-out."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="The SQL command to be executed."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">UPDATE [dbo].[DimVendorSCD3] SET [VendorCategory] = ? WHERE [VendorID] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ETL - Vendor\OLE DB Command 1.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[localhost.VendorManagementDW2]"
+                  connectionManagerRefId="Package.ConnectionManagers[localhost.VendorManagementDW2]"
+                  description="The OLE DB runtime connection used to access the database."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ETL - Vendor\OLE DB Command 1.Inputs[OLE DB Command Input]"
+                  errorOrTruncationOperation="Command Execution"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="OLE DB Command Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[VendorCategory]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="VendorCategory"
+                      externalMetadataColumnId="Package\ETL - Vendor\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorCategory]" />
+                    <inputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command 1.Inputs[OLE DB Command Input].Columns[VendorID]"
+                      cachedDataType="i4"
+                      cachedName="VendorID"
+                      externalMetadataColumnId="Package\ETL - Vendor\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorID]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_0]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="Param_0">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">65</property>
+                      </properties>
+                    </externalMetadataColumn>
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\OLE DB Command 1.Inputs[OLE DB Command Input].ExternalColumns[Param_1]"
+                      dataType="i4"
+                      name="Param_1">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          description="Parameter information.  Matches OLE DB's DBPARAMFLAGSENUM values."
+                          name="DBParamInfoFlags">81</property>
+                      </properties>
+                    </externalMetadataColumn>
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ETL - Vendor\OLE DB Command 1.Outputs[OLE DB Command Output]"
+                  exclusionGroup="1"
+                  name="OLE DB Command Output"
+                  synchronousInputId="Package\ETL - Vendor\OLE DB Command 1.Inputs[OLE DB Command Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL - Vendor\OLE DB Command 1.Outputs[OLE DB Command Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="OLE DB Command Error Output"
+                  synchronousInputId="Package\ETL - Vendor\OLE DB Command 1.Inputs[OLE DB Command Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ETL - Vendor\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ETL - Vendor\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ETL - Vendor\OLE DB Command 1.Outputs[OLE DB Command Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ETL - Vendor\PreviousCategory Lookup"
+              componentClassID="Microsoft.Lookup"
+              contactInfo="Lookup;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;6"
+              description="Joins additional columns to the data flow by looking up values in a table. For example, join to the 'employee id' column the employees table to get 'hire date' and 'employee name'. We recommend this transformation when the lookup table can fit into memory."
+              name="PreviousCategory Lookup"
+              usesDispositions="true"
+              version="6">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SQL statement that generates the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from [dbo].[DimVendorSCD3]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies a SQL statement that uses parameters to generate the lookup table."
+                  expressionType="Notify"
+                  name="SqlCommandParam"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">select * from (select * from [dbo].[DimVendorSCD3]) [refTable]
+where [refTable].[VendorID] = ?</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the type of connection used to access the reference dataset."
+                  name="ConnectionType"
+                  typeConverter="LookupConnectionType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the cache type of the lookup table."
+                  name="CacheType"
+                  typeConverter="CacheType">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies how the Lookup transformation handles rows without matching entries in the reference data set."
+                  name="NoMatchBehavior"
+                  typeConverter="LookupNoMatchBehavior">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the percentage of the cache that is allocated for rows with no matching entries in the reference dataset."
+                  name="NoMatchCachePercentage">0</property>
+                <property
+                  dataType="System.Int32"
+                  description="Maximum Memory Usage for Reference Cache on a 32 bit platform."
+                  name="MaxMemoryUsage">25</property>
+                <property
+                  dataType="System.Int64"
+                  description="Maximum Memory Usage for Reference Cache on a 64 bit platform."
+                  name="MaxMemoryUsage64">25</property>
+                <property
+                  dataType="System.String"
+                  description="Indicates whether to reference metadata in an XML format."
+                  name="ReferenceMetadataXml">&lt;referenceMetadata&gt;&lt;referenceColumns&gt;&lt;referenceColumn name="VendorID" dataType="DT_I4" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="VendorName" dataType="DT_STR" length="100" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="VendorAddress" dataType="DT_STR" length="255" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="ContactInfo" dataType="DT_STR" length="100" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="ApprovedVendor" dataType="DT_BOOL" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="VendorRating" dataType="DT_NUMERIC" length="0" precision="3" scale="2" codePage="0"/&gt;&lt;referenceColumn name="VendorCategory" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="PreviousVendorCategory" dataType="DT_STR" length="50" precision="0" scale="0" codePage="1252"/&gt;&lt;referenceColumn name="StartDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="EndDate" dataType="DT_DBDATE" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;referenceColumn name="IsCurrent" dataType="DT_BOOL" length="0" precision="0" scale="0" codePage="0"/&gt;&lt;/referenceColumns&gt;&lt;/referenceMetadata&gt;</property>
+                <property
+                  containsID="true"
+                  dataType="System.String"
+                  description="Specifies the list of lineage identifiers that map to the parameters that the SQL statement in the SQLCommand property uses. Entries in the list are separated by semicolons."
+                  name="ParameterMap">#{Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorID]};</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Determines whether duplicate keys in the reference data should be treated as errors when full cache mode is used."
+                  name="TreatDuplicateKeysAsError">false</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ETL - Vendor\PreviousCategory Lookup.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[localhost.VendorManagementDW2]"
+                  connectionManagerRefId="Package.ConnectionManagers[localhost.VendorManagementDW2]"
+                  description="Connection manager used to access lookup data."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ETL - Vendor\PreviousCategory Lookup.Inputs[Lookup Input]"
+                  name="Lookup Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ETL - Vendor\PreviousCategory Lookup.Inputs[Lookup Input].Columns[VendorID]"
+                      cachedDataType="i4"
+                      cachedName="VendorID"
+                      lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorID]">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table that a column joins."
+                          name="JoinToReferenceColumn">VendorID</property>
+                        <property
+                          dataType="System.Null"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn" />
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ETL - Vendor\PreviousCategory Lookup.Outputs[Lookup Match Output]"
+                  errorOrTruncationOperation="Lookup"
+                  errorRowDisposition="FailComponent"
+                  exclusionGroup="1"
+                  name="Lookup Match Output"
+                  synchronousInputId="Package\ETL - Vendor\PreviousCategory Lookup.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL - Vendor\PreviousCategory Lookup.Outputs[Lookup Match Output].Columns[PreviousVendorCategory]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Copy Column"
+                      length="50"
+                      lineageId="Package\ETL - Vendor\PreviousCategory Lookup.Outputs[Lookup Match Output].Columns[PreviousVendorCategory]"
+                      name="PreviousVendorCategory"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          dataType="System.String"
+                          description="Specifies the column in the reference table from which a column is copied."
+                          name="CopyFromReferenceColumn">PreviousVendorCategory</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL - Vendor\PreviousCategory Lookup.Outputs[Lookup No Match Output]"
+                  description="The Lookup output that handles rows with no matching entries in the reference dataset. Use this output when the NoMatchBehavior property is set to &quot;Send rows with no matching entries to the no match output.&quot;"
+                  exclusionGroup="1"
+                  name="Lookup No Match Output"
+                  synchronousInputId="Package\ETL - Vendor\PreviousCategory Lookup.Inputs[Lookup Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL - Vendor\PreviousCategory Lookup.Outputs[Lookup Error Output]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Lookup Error Output"
+                  synchronousInputId="Package\ETL - Vendor\PreviousCategory Lookup.Inputs[Lookup Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\ETL - Vendor\PreviousCategory Lookup.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\ETL - Vendor\PreviousCategory Lookup.Outputs[Lookup Error Output].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\ETL - Vendor\PreviousCategory Lookup.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\ETL - Vendor\PreviousCategory Lookup.Outputs[Lookup Error Output].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\ETL - Vendor\Slowly Changing Dimension"
+              componentClassID="Microsoft.SCD"
+              contactInfo="Slowly Changing Dimension;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved; http://www.microsoft.com/sql/support;3"
+              description="Updates a SQL Server Analysis Services data warehouse dimension. Update dimension records that are already present and  insert dimension records that aren't. For example, update the DimProduct table of the AdventureWorksDW OLAP database with data from the Products table in the AdventureWorks OLTP database."
+              name="Slowly Changing Dimension"
+              version="3">
+              <properties>
+                <property
+                  dataType="System.String"
+                  description="Specifies the SELECT statement used to create a schema rowset."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor, Microsoft.DataTransformationServices.Controls, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">SELECT [VendorCategory], [VendorID],[IsCurrent] FROM [dbo].[DimVendorSCD3]</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the WHERE clause in the SELECT statement that selects the current row among rows with identical business keys."
+                  name="CurrentRowWhere"></property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether historical attribute updates are directed to the transformation output for changing attribute updates."
+                  name="UpdateChangingAttributeHistory">true</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the transformation fails when columns with fixed attributes contain changes."
+                  name="FailOnFixedAttributeChange">false</property>
+                <property
+                  dataType="System.String"
+                  description="Specifies the column name for the inferred member."
+                  name="InferredMemberIndicator">IsCurrent</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether inferred member updates are detected."
+                  name="EnableInferredMember">true</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indicates whether the transformation fails when a lookup of an existing record fails."
+                  name="FailOnLookupFailure">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies that all rows in the input are new or the transformation detects the change type."
+                  name="IncomingRowChangeType"
+                  typeConverter="IncomingRowChangeType">1</property>
+                <property
+                  dataType="System.Int32"
+                  description="Specifies the column code page to use when code page information is unavailable from the data source."
+                  name="DefaultCodePage">1252</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\ETL - Vendor\Slowly Changing Dimension.Connections[LookupConnection]"
+                  connectionManagerID="Package.ConnectionManagers[localhost.VendorManagementDW2]"
+                  connectionManagerRefId="Package.ConnectionManagers[localhost.VendorManagementDW2]"
+                  description="Defines the connection to use for lookups in the dimension table"
+                  name="LookupConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]"
+                  name="Slowly Changing Dimension Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].Columns[VendorCategory]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="VendorCategory"
+                      externalMetadataColumnId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[VendorCategory]"
+                      lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorCategory]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          name="ColumnType"
+                          typeConverter="ColumnType">2</property>
+                      </properties>
+                    </inputColumn>
+                    <inputColumn
+                      refId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].Columns[VendorID]"
+                      cachedDataType="i4"
+                      cachedName="VendorID"
+                      externalMetadataColumnId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[VendorID]"
+                      lineageId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorID]">
+                      <properties>
+                        <property
+                          dataType="System.Int32"
+                          name="ColumnType"
+                          typeConverter="ColumnType">1</property>
+                      </properties>
+                    </inputColumn>
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[VendorCategory]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="VendorCategory" />
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[VendorID]"
+                      dataType="i4"
+                      name="VendorID" />
+                    <externalMetadataColumn
+                      refId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input].ExternalColumns[IsCurrent]"
+                      dataType="bool"
+                      name="IsCurrent" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\ETL - Vendor\Slowly Changing Dimension.Outputs[Unchanged Output]"
+                  description="Unchanged rows"
+                  exclusionGroup="1"
+                  name="Unchanged Output"
+                  synchronousInputId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL - Vendor\Slowly Changing Dimension.Outputs[New Output]"
+                  description="New rows"
+                  exclusionGroup="1"
+                  name="New Output"
+                  synchronousInputId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL - Vendor\Slowly Changing Dimension.Outputs[Fixed Attribute Output]"
+                  description="Rows with changes in columns tagged FixedAttribute"
+                  exclusionGroup="1"
+                  name="Fixed Attribute Output"
+                  synchronousInputId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL - Vendor\Slowly Changing Dimension.Outputs[Changing Attribute Updates Output]"
+                  description="These rows contain new information for ChangingAttribute (Type 1) column changes"
+                  exclusionGroup="1"
+                  name="Changing Attribute Updates Output"
+                  synchronousInputId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL - Vendor\Slowly Changing Dimension.Outputs[Historical Attribute Inserts Output]"
+                  description="HistoricalAttribute (Type 2) changes result in these new rows"
+                  exclusionGroup="2"
+                  name="Historical Attribute Inserts Output"
+                  synchronousInputId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\ETL - Vendor\Slowly Changing Dimension.Outputs[Inferred Member Updates Output]"
+                  description="Information to update unpopulated initial dimension row"
+                  exclusionGroup="1"
+                  name="Inferred Member Updates Output"
+                  synchronousInputId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]">
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
           </components>
           <paths>
             <path
+              refId="Package\ETL - Vendor.Paths[Changing Attribute Updates Output]"
+              endId="Package\ETL - Vendor\PreviousCategory Lookup.Inputs[Lookup Input]"
+              name="Changing Attribute Updates Output"
+              startId="Package\ETL - Vendor\Slowly Changing Dimension.Outputs[Changing Attribute Updates Output]" />
+            <path
+              refId="Package\ETL - Vendor.Paths[Derived Column Output]"
+              endId="Package\ETL - Vendor\OLE DB Command 1.Inputs[OLE DB Command Input]"
+              name="Derived Column Output"
+              startId="Package\ETL - Vendor\Derived Column.Outputs[Derived Column Output]" />
+            <path
+              refId="Package\ETL - Vendor.Paths[Inferred Member Updates Output]"
+              endId="Package\ETL - Vendor\OLE DB Command.Inputs[OLE DB Command Input]"
+              name="Inferred Member Updates Output"
+              startId="Package\ETL - Vendor\Slowly Changing Dimension.Outputs[Inferred Member Updates Output]" />
+            <path
+              refId="Package\ETL - Vendor.Paths[Lookup Match Output]"
+              endId="Package\ETL - Vendor\Derived Column.Inputs[Derived Column Input]"
+              name="Lookup Match Output"
+              startId="Package\ETL - Vendor\PreviousCategory Lookup.Outputs[Lookup Match Output]" />
+            <path
+              refId="Package\ETL - Vendor.Paths[New Output]"
+              endId="Package\ETL - Vendor\Insert Destination.Inputs[OLE DB Destination Input]"
+              name="New Output"
+              startId="Package\ETL - Vendor\Slowly Changing Dimension.Outputs[New Output]" />
+            <path
               refId="Package\ETL - Vendor.Paths[OLE DB Source Output]"
-              endId="Package\ETL - Vendor\Load to the VendorDim.Inputs[OLE DB Destination Input]"
+              endId="Package\ETL - Vendor\Slowly Changing Dimension.Inputs[Slowly Changing Dimension Input]"
               name="OLE DB Source Output"
               startId="Package\ETL - Vendor\Extract from Vendor Datasource Table.Outputs[OLE DB Source Output]" />
           </paths>
@@ -8609,14 +9383,14 @@ where [refTable].[ProductID] = ?</property>
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,34.6666661363177"
+              EndConnector="0,34.666666136318"
               Start="0,0"
-              End="0,27.1666661363177">
+              End="0,27.166666136318">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,27.1666661363177" />
+                    End="0,27.166666136318" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8631,14 +9405,14 @@ where [refTable].[ProductID] = ?</property>
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="0,22.5333328873581"
+              EndConnector="0,22.533332887358"
               Start="0,0"
-              End="0,15.0333328873581">
+              End="0,15.033332887358">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,15.0333328873581" />
+                    End="0,15.033332887358" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -8854,25 +9628,61 @@ where [refTable].[ProductID] = ?</property>
       <GraphLayout
         Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="189.6,41.6"
-          Id="Package\ETL - Delivery_Fact\Lookup for DeliveryDate"
-          TopLeft="215.999996781349,281.999995797873" />
-        <NodeLayout
           Size="213.6,41.6"
           Id="Package\ETL - Delivery_Fact\Lookup for Expected Delivery"
           TopLeft="497.999992579222,206.99999691546" />
-        <NodeLayout
-          Size="248,41.6"
-          Id="Package\ETL - Delivery_Fact\Extract Delivery from the Datasource"
-          TopLeft="73.999998897314,70.9999989420176" />
         <NodeLayout
           Size="196.8,41.6"
           Id="Package\ETL - Delivery_Fact\Load to the Delivery_Fact"
           TopLeft="596.999991104007,344.9999948591" />
         <NodeLayout
+          Size="189.6,41.6"
+          Id="Package\ETL - Delivery_Fact\Lookup for DeliveryDate"
+          TopLeft="215.999996781349,281.999995797873" />
+        <NodeLayout
           Size="156,41.6"
           Id="Package\ETL - Delivery_Fact\Lookup for POID"
           TopLeft="105.999998420477,185.999997228384" />
+        <NodeLayout
+          Size="248,41.6"
+          Id="Package\ETL - Delivery_Fact\Extract Delivery from the Datasource"
+          TopLeft="73.999998897314,70.9999989420176" />
+        <EdgeLayout
+          Id="Package\ETL - Delivery_Fact.Paths[OLE DB Source Output]"
+          TopLeft="197.999998897314,112.599998942018">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-14.000000476837,73.3999982863664"
+              Start="0,0"
+              End="-14.000000476837,65.8999982863664">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,32.6999991431832" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,32.6999991431832"
+                    Point2="0,36.6999991431832"
+                    Point3="-4,36.6999991431832" />
+                  <mssgle:LineSegment
+                    End="-10.000000476837,36.6999991431832" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-10.000000476837,36.6999991431832"
+                    Point2="-14.000000476837,36.6999991431832"
+                    Point3="-14.000000476837,40.6999991431832" />
+                  <mssgle:LineSegment
+                    End="-14.000000476837,65.8999982863664" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
         <EdgeLayout
           Id="Package\ETL - Delivery_Fact.Paths[Lookup Match Output2]"
           TopLeft="639.066659245888,248.59999691546">
@@ -8981,40 +9791,6 @@ where [refTable].[ProductID] = ?</property>
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <EdgeLayout
-          Id="Package\ETL - Delivery_Fact.Paths[OLE DB Source Output]"
-          TopLeft="197.999998897314,112.599998942018">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-14.000000476837,73.3999982863664"
-              Start="0,0"
-              End="-14.000000476837,65.8999982863664">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,32.6999991431832" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,32.6999991431832"
-                    Point2="0,36.6999991431832"
-                    Point3="-4,36.6999991431832" />
-                  <mssgle:LineSegment
-                    End="-10.000000476837,36.6999991431832" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-10.000000476837,36.6999991431832"
-                    Point2="-14.000000476837,36.6999991431832"
-                    Point3="-14.000000476837,40.6999991431832" />
-                  <mssgle:LineSegment
-                    End="-14.000000476837,65.8999982863664" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
       </GraphLayout>
     </LayoutInfo>
   </TaskHost>
@@ -9117,7 +9893,7 @@ where [refTable].[ProductID] = ?</property>
     design-time-name="Package\ETL - EmployeeDim">
     <LayoutInfo>
       <GraphLayout
-        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
           Size="183.2,41.6"
           Id="Package\ETL - EmployeeDim\Extract from Employee"
@@ -9181,7 +9957,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -9215,7 +9993,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -9249,7 +10029,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -9271,7 +10053,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -9305,7 +10089,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -9339,7 +10125,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -9373,7 +10161,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -9422,7 +10212,7 @@ where [refTable].[ProductID] = ?</property>
     design-time-name="Package\ETL - Location">
     <LayoutInfo>
       <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
           Size="247.2,41.6"
           Id="Package\ETL - Location\Load to LocationDim datawarehouse"
@@ -9450,7 +10240,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -9486,7 +10278,7 @@ where [refTable].[ProductID] = ?</property>
     design-time-name="Package\ETL - ProductDim">
     <LayoutInfo>
       <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
           Size="212,41.6"
           Id="Package\ETL - ProductDim\Load Data to the ProductDim"
@@ -9526,7 +10318,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -9564,53 +10358,67 @@ where [refTable].[ProductID] = ?</property>
       <GraphLayout
         Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="247.2,41.6"
-          Id="Package\ETL - PurchaseOrder_Fact\Extract from PurchaseOrderLineItem"
-          TopLeft="42.9999993592499,57.599999165535" />
-        <NodeLayout
           Size="151.2,41.6"
           Id="Package\ETL - PurchaseOrder_Fact\Product Lookup"
           TopLeft="354.999994710087,62.9999990612272" />
+        <NodeLayout
+          Size="176.8,41.6"
+          Id="Package\ETL - PurchaseOrder_Fact\Net Sales Before Tax"
+          TopLeft="470.999992981553,183.799997630715" />
         <NodeLayout
           Size="229.6,41.6"
           Id="Package\ETL - PurchaseOrder_Fact\Load to the PurchaseOrder_Fact"
           TopLeft="142.999997869134,330.599995097518" />
         <NodeLayout
+          Size="152,41.6"
+          Id="Package\ETL - PurchaseOrder_Fact\PODate Lookup"
+          TopLeft="481.99999281764,322.399995291233" />
+        <NodeLayout
           Size="185.6,41.6"
           Id="Package\ETL - PurchaseOrder_Fact\PurchaseOrder Lookup"
           TopLeft="82.9999987632036,159.799997988343" />
+        <NodeLayout
+          Size="247.2,41.6"
+          Id="Package\ETL - PurchaseOrder_Fact\Extract from PurchaseOrderLineItem"
+          TopLeft="42.9999993592499,57.599999165535" />
+        <NodeLayout
+          Size="168,41.6"
+          Id="Package\ETL - PurchaseOrder_Fact\Net Sales After Tax"
+          TopLeft="361.99999460578,244.399996870756" />
         <EdgeLayout
-          Id="Package\ETL - PurchaseOrder_Fact.Paths[OLE DB Source Output]"
-          TopLeft="166.59999935925,99.199999165535">
+          Id="Package\ETL - PurchaseOrder_Fact.Paths[Lookup Match Output1]"
+          TopLeft="454.466661376754,104.599999061227">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-20.4000005960463,60.5999988228083"
+              EndConnector="104.933331604799,79.1999985694882"
               Start="0,0"
-              End="-20.4000005960463,53.0999988228083">
+              End="104.933331604799,71.6999985694882">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,32.0492300689526" />
+                    End="0,28.1775910418445" />
                   <mssgle:CubicBezierSegment
-                    Point1="0,32.0492300689526"
-                    Point2="0,36.0492300689526"
-                    Point3="-4,36.0492300689526" />
+                    Point1="0,28.1775910418445"
+                    Point2="0,32.1775910418445"
+                    Point3="4,32.1775910418445" />
                   <mssgle:LineSegment
-                    End="-16.4000005960463,36.0492300689526" />
+                    End="100.933331604799,32.1775910418445" />
                   <mssgle:CubicBezierSegment
-                    Point1="-16.4000005960463,36.0492300689526"
-                    Point2="-20.4000005960463,36.0492300689526"
-                    Point3="-20.4000005960463,40.0492300689526" />
+                    Point1="100.933331604799,32.1775910418445"
+                    Point2="104.933331604799,32.1775910418445"
+                    Point3="104.933331604799,36.1775910418445" />
                   <mssgle:LineSegment
-                    End="-20.4000005960463,53.0999988228083" />
+                    End="104.933331604799,71.6999985694882" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="4.27527908364971,37.1775910418445,96.3827734375,11.609375"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -9649,82 +10457,6 @@ where [refTable].[ProductID] = ?</property>
               RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
-        <NodeLayout
-          Size="176.8,41.6"
-          Id="Package\ETL - PurchaseOrder_Fact\Net Sales Before Tax"
-          TopLeft="470.999992981553,183.799997630715" />
-        <EdgeLayout
-          Id="Package\ETL - PurchaseOrder_Fact.Paths[Lookup Match Output1]"
-          TopLeft="454.466661376754,104.599999061227">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="104.933331604799,79.1999985694882"
-              Start="0,0"
-              End="104.933331604799,71.6999985694882">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="0,28.1775910418445" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,28.1775910418445"
-                    Point2="0,32.1775910418445"
-                    Point3="4,32.1775910418445" />
-                  <mssgle:LineSegment
-                    End="100.933331604799,32.1775910418445" />
-                  <mssgle:CubicBezierSegment
-                    Point1="100.933331604799,32.1775910418445"
-                    Point2="104.933331604799,32.1775910418445"
-                    Point3="104.933331604799,36.1775910418445" />
-                  <mssgle:LineSegment
-                    End="104.933331604799,71.6999985694882" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <mssgm:EdgeLabel
-              BoundingBox="4.27527908364971,37.1775910418445,96.3827734375,11.609375"
-              RelativePosition="Any" />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <NodeLayout
-          Size="168,41.6"
-          Id="Package\ETL - PurchaseOrder_Fact\Net Sales After Tax"
-          TopLeft="361.99999460578,244.399996870756" />
-        <EdgeLayout
-          Id="Package\ETL - PurchaseOrder_Fact.Paths[Derived Column Output]"
-          TopLeft="470.999992981553,204.599997630715">
-          <EdgeLayout.Curve>
-            <mssgle:Curve
-              StartConnector="{assembly:Null}"
-              EndConnector="-24.9999983757735,39.7999992400408"
-              Start="0,0"
-              End="-24.9999983757735,32.2999992400408">
-              <mssgle:Curve.Segments>
-                <mssgle:SegmentCollection
-                  Capacity="5">
-                  <mssgle:LineSegment
-                    End="-20.9999983757735,0" />
-                  <mssgle:CubicBezierSegment
-                    Point1="-20.9999983757735,0"
-                    Point2="-24.9999983757735,0"
-                    Point3="-24.9999983757735,4" />
-                  <mssgle:LineSegment
-                    End="-24.9999983757735,32.2999992400408" />
-                </mssgle:SegmentCollection>
-              </mssgle:Curve.Segments>
-            </mssgle:Curve>
-          </EdgeLayout.Curve>
-          <EdgeLayout.Labels>
-            <EdgeLabelCollection />
-          </EdgeLayout.Labels>
-        </EdgeLayout>
-        <NodeLayout
-          Size="152,41.6"
-          Id="Package\ETL - PurchaseOrder_Fact\PODate Lookup"
-          TopLeft="481.99999281764,322.399995291233" />
         <EdgeLayout
           Id="Package\ETL - PurchaseOrder_Fact.Paths[Derived Column Output1]"
           TopLeft="445.99999460578,285.999996870756">
@@ -9756,7 +10488,75 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ETL - PurchaseOrder_Fact.Paths[Derived Column Output]"
+          TopLeft="470.999992981553,204.599997630715">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-24.9999983757735,39.7999992400408"
+              Start="0,0"
+              End="-24.9999983757735,32.2999992400408">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="-20.9999983757735,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-20.9999983757735,0"
+                    Point2="-24.9999983757735,0"
+                    Point3="-24.9999983757735,4" />
+                  <mssgle:LineSegment
+                    End="-24.9999983757735,32.2999992400408" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ETL - PurchaseOrder_Fact.Paths[OLE DB Source Output]"
+          TopLeft="166.59999935925,99.199999165535">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-20.4000005960463,60.5999988228083"
+              Start="0,0"
+              End="-20.4000005960463,53.0999988228083">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,32.0492300689526" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,32.0492300689526"
+                    Point2="0,36.0492300689526"
+                    Point3="-4,36.0492300689526" />
+                  <mssgle:LineSegment
+                    End="-16.4000005960463,36.0492300689526" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-16.4000005960463,36.0492300689526"
+                    Point2="-20.4000005960463,36.0492300689526"
+                    Point3="-20.4000005960463,40.0492300689526" />
+                  <mssgle:LineSegment
+                    End="-20.4000005960463,53.0999988228083" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -9899,13 +10699,13 @@ where [refTable].[ProductID] = ?</property>
       <GraphLayout
         Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="224.8,41.6"
-          Id="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact"
-          TopLeft="486.999992743135,259.999996125698" />
-        <NodeLayout
           Size="176.8,41.6"
           Id="Package\ETL - RecieptInspection\Lookup for ProductID"
           TopLeft="158.999997630715,125.199998182059" />
+        <NodeLayout
+          Size="224.8,41.6"
+          Id="Package\ETL - RecieptInspection\Load to RecieptInspection_Fact"
+          TopLeft="486.999992743135,259.999996125698" />
         <NodeLayout
           Size="200,41.6"
           Id="Package\ETL - RecieptInspection\Lookup for InspectionDate"
@@ -9949,7 +10749,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -10162,7 +10964,7 @@ where [refTable].[ProductID] = ?</property>
     design-time-name="Package\ETL - Time">
     <LayoutInfo>
       <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
           Size="200.8,41.6"
           Id="Package\ETL - Time\Extract from Time CSV file"
@@ -10202,7 +11004,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
       </GraphLayout>
@@ -10225,41 +11029,215 @@ where [refTable].[ProductID] = ?</property>
     design-time-name="Package\ETL - Vendor">
     <LayoutInfo>
       <GraphLayout
-        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        Capacity="16" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mssgm="clr-namespace:Microsoft.SqlServer.Graph.Model;assembly=Microsoft.SqlServer.Graph">
         <NodeLayout
-          Size="184.8,41.6"
-          Id="Package\ETL - Vendor\Load to the VendorDim"
-          TopLeft="185.999997228384,257.9999961555" />
+          Size="208,41.6"
+          Id="Package\ETL - Vendor\Slowly Changing Dimension"
+          TopLeft="205.1,107.1" />
         <NodeLayout
           Size="255.2,41.6"
           Id="Package\ETL - Vendor\Extract from Vendor Datasource Table"
-          TopLeft="158.999997630715,98.999998524785" />
+          TopLeft="181.5,5.49999999999995" />
         <EdgeLayout
           Id="Package\ETL - Vendor.Paths[OLE DB Source Output]"
-          TopLeft="286.599997630715,140.599998524785">
+          TopLeft="309.1,47.1">
           <EdgeLayout.Curve>
             <mssgle:Curve
               StartConnector="{assembly:Null}"
-              EndConnector="-8.20000040233123,117.399997630715"
+              EndConnector="0,60.0000000000001"
               Start="0,0"
-              End="-8.20000040233123,109.899997630715">
+              End="0,52.5000000000001">
               <mssgle:Curve.Segments>
                 <mssgle:SegmentCollection
                   Capacity="5">
                   <mssgle:LineSegment
-                    End="0,54.6999988153577" />
-                  <mssgle:CubicBezierSegment
-                    Point1="0,54.6999988153577"
-                    Point2="0,58.6999988153577"
-                    Point3="-4,58.6999988153577" />
+                    End="0,52.5000000000001" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="159.2,41.6"
+          Id="Package\ETL - Vendor\Insert Destination"
+          TopLeft="5.50000000000009,208.7" />
+        <EdgeLayout
+          Id="Package\ETL - Vendor.Paths[New Output]"
+          TopLeft="259.1,148.7">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-174,60"
+              Start="0,0"
+              End="-174,52.5">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
                   <mssgle:LineSegment
-                    End="-4.20000040233123,58.6999988153577" />
+                    End="0,16.506329113924" />
                   <mssgle:CubicBezierSegment
-                    Point1="-4.20000040233123,58.6999988153577"
-                    Point2="-8.20000040233123,58.6999988153577"
-                    Point3="-8.20000040233123,62.6999988153577" />
+                    Point1="0,16.506329113924"
+                    Point2="0,20.506329113924"
+                    Point3="-4,20.506329113924" />
                   <mssgle:LineSegment
-                    End="-8.20000040233123,109.899997630715" />
+                    End="-170,20.506329113924" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-170,20.506329113924"
+                    Point2="-174,20.506329113924"
+                    Point3="-174,24.506329113924" />
+                  <mssgle:LineSegment
+                    End="-174,52.5" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-114.09138671875,25.506329113924,54.1827734375,11.43359375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="167.2,41.6"
+          Id="Package\ETL - Vendor\OLE DB Command"
+          TopLeft="207.791667634207,235.783333144999" />
+        <EdgeLayout
+          Id="Package\ETL - Vendor.Paths[Inferred Member Updates Output]"
+          TopLeft="309.1,148.7">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-17.7083323657926,87.0833331449992"
+              Start="0,0"
+              End="-17.7083323657926,79.5833331449992">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,39.5416665724996" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,39.5416665724996"
+                    Point2="0,43.5416665724996"
+                    Point3="-4,43.5416665724996" />
+                  <mssgle:LineSegment
+                    End="-13.7083323657926,43.5416665724996" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-13.7083323657926,43.5416665724996"
+                    Point2="-17.7083323657926,43.5416665724996"
+                    Point3="-17.7083323657926,47.5416665724996" />
+                  <mssgle:LineSegment
+                    End="-17.7083323657926,79.5833331449992" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-83.2571544641463,48.5416665724996,148.8059765625,11.658203125"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="176,41.6"
+          Id="Package\ETL - Vendor\OLE DB Command 1"
+          TopLeft="464.211110504027,260.699999638399" />
+        <NodeLayout
+          Size="197.6,41.6"
+          Id="Package\ETL - Vendor\PreviousCategory Lookup"
+          TopLeft="519.444416063253,119.407406577063" />
+        <EdgeLayout
+          Id="Package\ETL - Vendor.Paths[Changing Attribute Updates Output]"
+          TopLeft="413.1,127.9">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="106.344416063253,12.3074065770631"
+              Start="0,0"
+              End="98.8444160632527,12.3074065770631">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="49.1722080316263,0" />
+                  <mssgle:CubicBezierSegment
+                    Point1="49.1722080316263,0"
+                    Point2="53.1722080316263,0"
+                    Point3="53.1722080316263,4" />
+                  <mssgle:LineSegment
+                    End="53.1722080316263,8.30740657706312" />
+                  <mssgle:CubicBezierSegment
+                    Point1="53.1722080316263,8.30740657706312"
+                    Point2="53.1722080316263,12.3074065770631"
+                    Point3="57.1722080316263,12.3074065770631" />
+                  <mssgle:LineSegment
+                    End="98.8444160632527,12.3074065770631" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-25.3616982183737,-17.6630859375,157.0678125,11.6630859375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <NodeLayout
+          Size="152.8,41.6"
+          Id="Package\ETL - Vendor\Derived Column"
+          TopLeft="545.370340572648,190.666665340794" />
+        <EdgeLayout
+          Id="Package\ETL - Vendor.Paths[Lookup Match Output]"
+          TopLeft="620.00737831795,161.007406577063">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="0,29.6592587637313"
+              Start="0,0"
+              End="0,22.1592587637313">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,22.1592587637313" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <mssgm:EdgeLabel
+              BoundingBox="-48.19138671875,5.27494188186563,96.3827734375,11.609375"
+              RelativePosition="Any" />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+        <EdgeLayout
+          Id="Package\ETL - Vendor.Paths[Derived Column Output]"
+          TopLeft="621.770340572648,232.266665340794">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="-69.5592300686216,28.4333342976041"
+              Start="0,0"
+              End="-69.5592300686216,20.9333342976041">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,10.2166671488021" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,10.2166671488021"
+                    Point2="0,14.2166671488021"
+                    Point3="-4,14.2166671488021" />
+                  <mssgle:LineSegment
+                    End="-65.5592300686216,14.2166671488021" />
+                  <mssgle:CubicBezierSegment
+                    Point1="-65.5592300686216,14.2166671488021"
+                    Point2="-69.5592300686216,14.2166671488021"
+                    Point3="-69.5592300686216,18.2166671488021" />
+                  <mssgle:LineSegment
+                    End="-69.5592300686216,20.9333342976041" />
                 </mssgle:SegmentCollection>
               </mssgle:Curve.Segments>
             </mssgle:Curve>
@@ -10285,15 +11263,76 @@ where [refTable].[ProductID] = ?</property>
     </Properties>
   </PipelineComponentMetadata>
   <PipelineComponentMetadata
-    design-time-name="Package\ETL - Vendor\Load to the VendorDim">
+    design-time-name="Package\ETL - Vendor\Slowly Changing Dimension">
     <Properties>
       <Property>
-        <Name>DataSourceViewID</Name>
-      </Property>
-      <Property>
-        <Name>TableInfoObjectType</Name>
+        <Name>SCDMetadata</Name>
         <Value
-          type="q2:string">Table</Value>
+          type="q2:string">&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;SCDWizardMetadata xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"&gt;
+  &lt;ConnectionID&gt;{3A732163-FBAD-4CC4-9D0E-E6E89C3E3BDD}&lt;/ConnectionID&gt;
+  &lt;TableName&gt;[dbo].[DimVendorSCD3]&lt;/TableName&gt;
+  &lt;InputToColumnsCollection&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[ApprovedVendor]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;ApprovedVendor&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[ContactInfo]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;ContactInfo&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorAddress]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;VendorAddress&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorCategory]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;VendorCategory&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;ChangingAttribute&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorID]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;VendorID&lt;/ColumnName&gt;
+      &lt;KeyType&gt;BusinessKey&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorName]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;VendorName&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+    &lt;InputColumnToDBColumn&gt;
+      &lt;IdentificationString&gt;Extract from Vendor Datasource Table.Outputs[OLE DB Source Output].Columns[VendorRating]&lt;/IdentificationString&gt;
+      &lt;ColumnName&gt;VendorRating&lt;/ColumnName&gt;
+      &lt;KeyType&gt;None&lt;/KeyType&gt;
+      &lt;ChangeType&gt;None&lt;/ChangeType&gt;
+    &lt;/InputColumnToDBColumn&gt;
+  &lt;/InputToColumnsCollection&gt;
+  &lt;GeneratedComponentsIdentificationStrings&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;Insert Destination&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command&lt;/anyType&gt;
+    &lt;anyType xsi:type="xsd:string"&gt;OLE DB Command 1&lt;/anyType&gt;
+  &lt;/GeneratedComponentsIdentificationStrings&gt;
+  &lt;FailFixedAttribute&gt;false&lt;/FailFixedAttribute&gt;
+  &lt;FailChangeAttribute&gt;true&lt;/FailChangeAttribute&gt;
+  &lt;UseStartEndDate&gt;true&lt;/UseStartEndDate&gt;
+  &lt;CurrentIndicatorColumn /&gt;
+  &lt;InferredIndicatorColumn&gt;IsCurrent&lt;/InferredIndicatorColumn&gt;
+  &lt;ValueCurrent /&gt;
+  &lt;ValueExpired /&gt;
+  &lt;StartDateColumn&gt;StartDate&lt;/StartDateColumn&gt;
+  &lt;EndDateColumn&gt;EndDate&lt;/EndDateColumn&gt;
+  &lt;DateVariable&gt;System::CreationDate&lt;/DateVariable&gt;
+  &lt;EnableInferredSupport&gt;true&lt;/EnableInferredSupport&gt;
+&lt;/SCDWizardMetadata&gt;</Value>
       </Property>
     </Properties>
   </PipelineComponentMetadata>
@@ -10361,7 +11400,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -10395,7 +11436,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -10429,7 +11472,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -10463,7 +11508,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -10497,7 +11544,9 @@ where [refTable].[ProductID] = ?</property>
             </mssgle:Curve>
           </EdgeLayout.Curve>
           <EdgeLayout.Labels>
-            <EdgeLabelCollection />
+            <mssgm:EdgeLabel
+              BoundingBox="0,0,0,0"
+              RelativePosition="Any" />
           </EdgeLayout.Labels>
         </EdgeLayout>
         <EdgeLayout
@@ -10598,6 +11647,29 @@ where [refTable].[ProductID] = ?</property>
         <Name>TableInfoObjectType</Name>
         <Value
           type="q2:string">Table</Value>
+      </Property>
+    </Properties>
+  </PipelineComponentMetadata>
+  <PipelineComponentMetadata
+    design-time-name="Package\ETL - Vendor\PreviousCategory Lookup">
+    <Properties>
+      <Property>
+        <Name>OverwriteParamsSQLProp</Name>
+        <Value
+          type="q2:boolean">false</Value>
+      </Property>
+      <Property>
+        <Name>UsedTableName</Name>
+        <Value
+          type="q3:string">[dbo].[DimVendorSCD3]</Value>
+      </Property>
+      <Property>
+        <Name>TableInfoObjectType</Name>
+        <Value
+          type="q4:int">0</Value>
+      </Property>
+      <Property>
+        <Name>DataSourceViewID</Name>
       </Property>
     </Properties>
   </PipelineComponentMetadata>
